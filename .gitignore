@@ -1,0 +1,74 @@
+# =============================================================
+# tele-llm-finetune .gitignore
+# =============================================================
+
+# ── Datasets ──────────────────────────────────────────────────
+datasets/
+tele-preprocessed/
+tele-tokenized/
+*.jsonl
+*.arrow
+*.parquet
+
+# ── Checkpoints & Model Weights ───────────────────────────────
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+
+# ── Training Logs ─────────────────────────────────────────────
+training.log
+*.log
+runs/
+wandb/
+lightning_logs/
+
+# ── HuggingFace Cache ─────────────────────────────────────────
+.cache/
+~/.cache/huggingface/
+
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# ── Virtual Environments ──────────────────────────────────────
+.env
+.venv
+env/
+venv/
+ENV/
+
+# ── Jupyter ───────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# ── IDE ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Misc large files ──────────────────────────────────────────
+*.zip
+*.tar.gz
+*.tar
+*.gz
