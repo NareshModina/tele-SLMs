@@ -1,0 +1,99 @@
+{
+  "config": {
+    "n_examples": 2000,
+    "seed": 42,
+    "dataset": "AliMaatouk/Tele-Eval"
+  },
+  "results": [
+    {
+      "model": "Stage2 (pretrain+SFT)",
+      "model_path": "./checkpoints/stage2-merged",
+      "n_examples": 2000,
+      "exact_match": 0.1,
+      "token_f1": 30.08,
+      "perplexity": 8.3492,
+      "samples": [
+        {
+          "question": "How many global and regional channels does CERNET have connected with other countries and regions?",
+          "gold": "CERNET has 12 global and regional channels connected with the United States, Canada, the UK, Germany, Japan, and Hong Kong",
+          "prediction": "CERNET has connected with 140 global and regional channels in 100 countries and regions.",
+          "em": 0,
+          "f1": 0.5625
+        },
+        {
+          "question": "What are two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework?",
+          "gold": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the load of pathogens in an exhaled breath or cough/sneeze, and the infectivity of a pathogen (which can be estimated through phylogenetic analysis, droplet size, and environmental factors).",
+          "prediction": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the number of pathogens present and the level of exposure. The more pathogens present, the greater the risk of infection. Additionally, the level of exposure can also increase the risk of infection, as a higher level of exposure can lead to a greater chance of infection.",
+          "em": 0,
+          "f1": 0.4742
+        },
+        {
+          "question": "What is the objective of the route optimization in the traffic routing setting?",
+          "gold": "The objective of route optimization in the traffic routing setting is to route packets along paths with smaller round trip times and not only small queuing delays, as the earlier each packet is delivered, the larger the rate. The protocol should automatically select the most efficient routes, depending on the congestion prevailing on each link.",
+          "prediction": "The objective of the route optimization in the traffic routing setting is to find the shortest path between two points while minimizing the cost of travel. This can be achieved by using algorithms such as Dijkstra's algorithm or A* algorithm. The goal is to find the most efficient route that minimizes the time, fuel, and other costs associated with the journey.",
+          "em": 0,
+          "f1": 0.3469
+        },
+        {
+          "question": "What is one scenario where the TrGW can use the \"Additional Bandwidth Properties\" information element?",
+          "gold": "The TrGW can use this information for rate adaption, such as selecting an appropriate encoding and redundancy when transcoding media streams.",
+          "prediction": "The TrGW can use the \"Additional Bandwidth Properties\" information element to provide additional bandwidth information to the MGCF. This can be used to optimize the bandwidth allocation for a particular call, or to provide additional information to the MGCF for better call quality.",
+          "em": 0,
+          "f1": 0.2143
+        },
+        {
+          "question": "What is the primary motivation for developing the SWARM parallelism algorithm?",
+          "gold": "The primary motivation for developing the SWARM parallelism algorithm is the need for a practical way of training large neural networks using unreliable heterogeneous devices with slow interconnect.",
+          "prediction": "The primary motivation for developing the SWARM parallelism algorithm is to improve the performance of parallel computing systems by allowing multiple tasks to be executed simultaneously.",
+          "em": 0,
+          "f1": 0.383
+        }
+      ]
+    },
+    {
+      "model": "Base Qwen2.5-1.5B",
+      "model_path": "Qwen/Qwen2.5-1.5B",
+      "n_examples": 2000,
+      "exact_match": 0.15,
+      "token_f1": 31.2,
+      "perplexity": 8.9043,
+      "samples": [
+        {
+          "question": "How many global and regional channels does CERNET have connected with other countries and regions?",
+          "gold": "CERNET has 12 global and regional channels connected with the United States, Canada, the UK, Germany, Japan, and Hong Kong",
+          "prediction": "CERNET has 10 global and 10 regional channels.",
+          "em": 0,
+          "f1": 0.4615
+        },
+        {
+          "question": "What are two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework?",
+          "gold": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the load of pathogens in an exhaled breath or cough/sneeze, and the infectivity of a pathogen (which can be estimated through phylogenetic analysis, droplet size, and environmental factors).",
+          "prediction": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are:",
+          "em": 0,
+          "f1": 0.6
+        },
+        {
+          "question": "What is the objective of the route optimization in the traffic routing setting?",
+          "gold": "The objective of route optimization in the traffic routing setting is to route packets along paths with smaller round trip times and not only small queuing delays, as the earlier each packet is delivered, the larger the rate. The protocol should automatically select the most efficient routes, depending on the congestion prevailing on each link.",
+          "prediction": "The objective of the route optimization in the traffic routing setting is to find the shortest path between two points in a network.",
+          "em": 0,
+          "f1": 0.3077
+        },
+        {
+          "question": "What is one scenario where the TrGW can use the \"Additional Bandwidth Properties\" information element?",
+          "gold": "The TrGW can use this information for rate adaption, such as selecting an appropriate encoding and redundancy when transcoding media streams.",
+          "prediction": "The TrGW can use the \"Additional Bandwidth Properties\" information element to request additional bandwidth information from the P-GW.",
+          "em": 0,
+          "f1": 0.2353
+        },
+        {
+          "question": "What is the primary motivation for developing the SWARM parallelism algorithm?",
+          "gold": "The primary motivation for developing the SWARM parallelism algorithm is the need for a practical way of training large neural networks using unreliable heterogeneous devices with slow interconnect.",
+          "prediction": "The primary motivation for developing the SWARM parallelism algorithm is to improve the efficiency of parallel processing in high-performance computing environments.",
+          "em": 0,
+          "f1": 0.4286
+        }
+      ]
+    }
+  ]
+}
