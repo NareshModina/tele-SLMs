@@ -1,0 +1,20 @@
+[
+  {
+    "label": "SmolLM2-135M-pretrain-sft",
+    "model_name": "HuggingFaceTB/SmolLM2-135M",
+    "source_filter": "standard",
+    "n_examples": 2000,
+    "ans_ppl": 9.236780239655168,
+    "semscore": 0.6762517468929291,
+    "timestamp": "20260331_124849"
+  },
+  {
+    "label": "SmolLM2-135M-sft-only",
+    "model_name": "HuggingFaceTB/SmolLM2-135M",
+    "source_filter": "standard",
+    "n_examples": 2000,
+    "ans_ppl": 13.292961346756412,
+    "semscore": 0.652573628352955,
+    "timestamp": "20260331_161309"
+  }
+]

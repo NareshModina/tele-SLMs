@@ -1,0 +1,7 @@
+  Total steps    : 806
+  Epochs         : 2.0
+  Train entries  : 80
+  Eval entries   : 4
+  Best step      : 800
+  Best eval loss : 1.6865
+  Saved → ./results/plots/SmolLM2-135M-sft-A_curves.png

@@ -2,6 +2,8 @@
 # tele-llm-finetune .gitignore
 # =============================================================
 
+# --- datasets ----
+full_finetune_03_2026/tele-tokenized/
 # ── Checkpoints & Model Weights ───────────────────────────────
 checkpoints/
 *.safetensors

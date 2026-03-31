@@ -1,0 +1,87 @@
+{
+  "label": "SmolLM2-135M-sft-only-full",
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "checkpoint_path": "./checkpoints/SmolLM2-135M-sft-merged",
+  "n_examples": 2000,
+  "source_filter": "all",
+  "exact_match": 0.15,
+  "token_f1": 23.36,
+  "perplexity": 13.6044,
+  "source_breakdown": {
+    "standard": 229,
+    "arxiv": 1526,
+    "wiki": 245
+  },
+  "samples": [
+    {
+      "question": "How many global and regional channels does CERNET have connected with other countries and regions?",
+      "gold": "CERNET has 12 global and regional channels connected with the United States, Canada, the UK, Germany, Japan, and Hong Kong",
+      "prediction": "CERNET has 12 global and regional channels.",
+      "em": 0,
+      "f1": 0.56
+    },
+    {
+      "question": "What are two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework?",
+      "gold": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the load of pathogens in an exhaled breath or cough/sneeze, and the infectivity of a pathogen (which can be estimated through phylogenetic analysis, droplet size, and environmental factors).",
+      "prediction": "The first factor is the presence of a susceptible human (RX) in the MoHANET framework. The second factor is the presence of a susceptible human (RX) in the MoHANET framework. The presence of a susceptible human (RX) in the MoHANET framework can increase the risk of transmission of pathogens in the MoHANET framework.",
+      "em": 0,
+      "f1": 0.3171
+    },
+    {
+      "question": "What is the objective of the route optimization in the traffic routing setting?",
+      "gold": "The objective of route optimization in the traffic routing setting is to route packets along paths with smaller round trip times and not only small queuing delays, as the earlier each packet is delivered, the larger the rate. The protocol should automatically select the most efficient routes, depending on the congestion prevailing on each link.",
+      "prediction": "The objective of the route optimization in the traffic routing setting is to minimize the total cost of the route. This is achieved by optimizing the routing of the traffic to minimize the total cost of the route. This is achieved by optimizing the routing of the traffic to minimize the total cost of the route.",
+      "em": 0,
+      "f1": 0.2667
+    },
+    {
+      "question": "What is one scenario where the TrGW can use the \"Additional Bandwidth Properties\" information element?",
+      "gold": "The TrGW can use this information for rate adaption, such as selecting an appropriate encoding and redundancy when transcoding media streams.",
+      "prediction": "The TrGW can use the additional bandwidth properties information element to determine the optimal bandwidth for a given application. This information can be used to determine the optimal bandwidth for a given application, such as a video streaming application, or a web application.",
+      "em": 0,
+      "f1": 0.2963
+    },
+    {
+      "question": "What is the primary motivation for developing the SWARM parallelism algorithm?",
+      "gold": "The primary motivation for developing the SWARM parallelism algorithm is the need for a practical way of training large neural networks using unreliable heterogeneous devices with slow interconnect.",
+      "prediction": "The primary motivation for developing the SWARM parallelism algorithm is to improve the performance of parallel processing. The algorithm is designed to run on a single processor, and it is designed to run in a parallel fashion, so that the results of the computation are distributed across multiple processors. This allows the algorithm to run on a single processor, and it is designed to run in a parallel fashion, so that the results of the computation are distributed across multiple processors. This allows the algorithm to run on a single processor, and it is designed to run in a parallel fashion, so that the results of the computation are distributed across multiple processors. This allows the algorithm to run on a single processor, and it is designed to run in a parallel fashion, so that the results",
+      "em": 0,
+      "f1": 0.1295
+    },
+    {
+      "question": "What is the main problem faced by recommender systems?",
+      "gold": "The main problem faced by recommender systems is the need to provide recommendations in a reasonably short amount of time, as available datasets comprise millions of user-item ratings and the scalability of the algorithm is critical.",
+      "prediction": "The main problem faced by recommender systems is the difficulty of finding the right person to recommend to. This is because the system is not able to identify the person who is most likely to be the best match for the task at hand. This is because the system is not able to identify the person\u2019s preferences, which is a key component of recommender systems.",
+      "em": 0,
+      "f1": 0.2558
+    },
+    {
+      "question": "How many free-standing steel framework towers support the step-radiating antennas at the Burg site?",
+      "gold": "Three free-standing steel framework towers support the step-radiating antennas at the Burg site.",
+      "prediction": "The towers are supported by 10 steel frame towers, each 100 feet in height. The towers are 100 feet apart and are 100 feet apart from each other. The towers are 100 feet apart and are 100 feet apart from each other. The towers are 100 feet apart and are 100 feet apart from each other. The towers are 100 feet apart and are 100 feet apart from each other. The towers are 100 feet apart and are 100 feet apart from each other. The towers are 100 feet apart and are 100 feet apart from each other. The towers are",
+      "em": 0,
+      "f1": 0.0385
+    },
+    {
+      "question": "How many distinct hashtags were found in the CompSci network and the Random network, and how many times were they used on average?",
+      "gold": "In the CompSci network, there are 1,081,403 distinct hashtags, each used approximately 9 times on average, while in the Random network, there are 1,507,773 distinct hashtags, each used approximately 9 times on average.",
+      "prediction": "The CompSci network had 1,000 distinct hashtags, and the Random network had 1,000 distinct hashtags. The average usage of the two networks was 1,000 times.",
+      "em": 0,
+      "f1": 0.3846
+    },
+    {
+      "question": "What is the innovative content generation method that represents a paradigm shift from User-Generated Content (UGC) and Professionally Generated Content (PGC)?",
+      "gold": "AIGC (Artificially Intelligent Generated Content)",
+      "prediction": "The innovative content generation method that represents a paradigm shift from User-Generated Content (UGC) and Professionally Generated Content (PGC) is Content-Generated Content (CGC). CGC is a method of generating content that is created by the user, rather than by a third party. CGC is a more efficient and cost-effective way to generate content than traditional methods of content creation. CGC is also more effective in generating content that is relevant to the user, as it is created by the user. CGC is also more effective in generating content that is relevant to the audience, as it is created by the user. CGC is also more effective in generating content that is relevant to the audience, as it is",
+      "em": 0,
+      "f1": 0.0357
+    },
+    {
+      "question": "What are the primary types of tasks GNNs can perform on graph data?",
+      "gold": "GNNs can perform node-level tasks, graph-level tasks, and edge-level tasks.",
+      "prediction": "GNNs can perform a variety of tasks on graph data, including clustering, dimensionality reduction, and feature extraction. GNNs can also be used to perform graph-based tasks such as graph-based search, graph-based recommendation, and graph-based visualization.",
+      "em": 0,
+      "f1": 0.2727
+    }
+  ]
+}

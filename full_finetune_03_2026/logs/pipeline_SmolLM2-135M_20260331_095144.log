@@ -1,0 +1,40 @@
+Pipeline run : 20260331_095144
+Models       : HuggingFaceTB/SmolLM2-135M
+Total time   : 717.6 min
+
+=================================================================
+PIPELINE SUMMARY
+=================================================================
+Model                Stage              Status                 Time
+-----------------------------------------------------------------
+SmolLM2-135M         tokenize           skipped (exists)          —
+  → ./tele-tokenized
+SmolLM2-135M         pretrain           done                 22937s
+  → ./checkpoints/SmolLM2-135M-telespec
+SmolLM2-135M         plot-pretrain      done                     1s
+SmolLM2-135M         sft-A              done                  1934s
+  → ./checkpoints/SmolLM2-135M-telespec-sft-merged
+SmolLM2-135M         sft-B              done                  1898s
+  → ./checkpoints/SmolLM2-135M-sft-merged
+SmolLM2-135M         plot-sft-A         done                     1s
+SmolLM2-135M         plot-sft-B         done                     1s
+SmolLM2-135M         eval-A-standards   done                  4479s
+SmolLM2-135M         eval-A-full        done                  4095s
+SmolLM2-135M         eval-B-standards   done                  3823s
+SmolLM2-135M         eval-B-full        done                  3883s
+
+=================================================================
+FINAL LEADERBOARD
+=================================================================
+
+=============================================================================
+  LEADERBOARD  (AliMaatouk/Tele-Eval)
+=============================================================================
+  Model                            Filter             F1       EM        PPL
+  ---------------------------------------------------------------------------
+  SmolLM2-135M-sft-only-standards  standard       27.67%    0.05%    12.9197
+  SmolLM2-135M-pretrain-sft-standards standard       25.58%    0.05%     8.8482
+  SmolLM2-135M-sft-only-full       all            23.36%    0.15%    13.6044
+  SmolLM2-135M-pretrain-sft-full   all            21.92%    0.05%    13.0142
+=============================================================================
+

@@ -1,0 +1,87 @@
+{
+  "label": "SmolLM2-135M-pretrain-sft-full",
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "checkpoint_path": "./checkpoints/SmolLM2-135M-telespec-sft-merged",
+  "n_examples": 2000,
+  "source_filter": "all",
+  "exact_match": 0.05,
+  "token_f1": 21.92,
+  "perplexity": 13.0142,
+  "source_breakdown": {
+    "standard": 229,
+    "arxiv": 1526,
+    "wiki": 245
+  },
+  "samples": [
+    {
+      "question": "How many global and regional channels does CERNET have connected with other countries and regions?",
+      "gold": "CERNET has 12 global and regional channels connected with the United States, Canada, the UK, Germany, Japan, and Hong Kong",
+      "prediction": "CERNET has 12 global and regional channels.",
+      "em": 0,
+      "f1": 0.56
+    },
+    {
+      "question": "What are two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework?",
+      "gold": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the load of pathogens in an exhaled breath or cough/sneeze, and the infectivity of a pathogen (which can be estimated through phylogenetic analysis, droplet size, and environmental factors).",
+      "prediction": "Two factors that can increase the infection risk when a susceptible human (RX) receives transmitted pathogens in the MoHANET framework are the presence of multiple RXs in the same area and the presence of multiple RXs in the same area. The presence of multiple RXs in the same area can increase the risk of infection because the RXs can be spread from one RX to another. Additionally, multiple RXs in the same area can increase the risk of infection because the RXs can be spread from one RX to another.",
+      "em": 0,
+      "f1": 0.4068
+    },
+    {
+      "question": "What is the objective of the route optimization in the traffic routing setting?",
+      "gold": "The objective of route optimization in the traffic routing setting is to route packets along paths with smaller round trip times and not only small queuing delays, as the earlier each packet is delivered, the larger the rate. The protocol should automatically select the most efficient routes, depending on the congestion prevailing on each link.",
+      "prediction": "The objective of the route optimization in the traffic routing setting is to reduce the number of retransmissions and improve the overall throughput of the traffic. This is achieved by optimizing the routing of traffic based on the traffic characteristics of the network. This can be done by optimizing the routing of traffic based on the traffic characteristics of the network, such as the traffic flow, the traffic type, the traffic quality, the traffic delay, the traffic delay ratio, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the traffic delay tolerance, the",
+      "em": 0,
+      "f1": 0.2069
+    },
+    {
+      "question": "What is one scenario where the TrGW can use the \"Additional Bandwidth Properties\" information element?",
+      "gold": "The TrGW can use this information for rate adaption, such as selecting an appropriate encoding and redundancy when transcoding media streams.",
+      "prediction": "The TrGW can use the \"Additional Bandwidth Properties\" information element to determine the additional bandwidth properties for a given resource. This information element is used to determine the maximum number of bits per second that can be transmitted over a given resource. The TrGW can use this information to determine the maximum number of bits per second that can be transmitted over a given resource.",
+      "em": 0,
+      "f1": 0.16
+    },
+    {
+      "question": "What is the primary motivation for developing the SWARM parallelism algorithm?",
+      "gold": "The primary motivation for developing the SWARM parallelism algorithm is the need for a practical way of training large neural networks using unreliable heterogeneous devices with slow interconnect.",
+      "prediction": "The primary motivation for developing the SWARM parallelism algorithm is to improve the performance of parallel computing algorithms. The SWARM algorithm is a parallel algorithm that can be used to efficiently parallelize a large number of computations. It is based on the concept of \"swarm\" and is used to efficiently parallelize a large number of computations. The SWARM algorithm is designed to be scalable and can be used to parallelize a large number of computations. It is also able to handle large numbers of computations with a small number of threads. The SWARM algorithm is designed to be scalable and can be used to parallelize a large number of computations with a small number of threads. It is also able to handle large numbers of computations with a small number of threads.",
+      "em": 0,
+      "f1": 0.156
+    },
+    {
+      "question": "What is the main problem faced by recommender systems?",
+      "gold": "The main problem faced by recommender systems is the need to provide recommendations in a reasonably short amount of time, as available datasets comprise millions of user-item ratings and the scalability of the algorithm is critical.",
+      "prediction": "The main problem faced by recommender systems is the lack of scalability. The system needs to be able to scale up and down to handle the increasing amount of data that is being generated. It also needs to be able to handle the increasing amount of data that is being generated from different sources.",
+      "em": 0,
+      "f1": 0.375
+    },
+    {
+      "question": "How many free-standing steel framework towers support the step-radiating antennas at the Burg site?",
+      "gold": "Three free-standing steel framework towers support the step-radiating antennas at the Burg site.",
+      "prediction": "The number of free-standing steel framework towers supporting the step-radiating antennas at the Burg site is unknown. However, it is estimated that there are approximately 100 steel framework towers supporting the step-radiating antennas at the Burg site.",
+      "em": 0,
+      "f1": 0.4186
+    },
+    {
+      "question": "How many distinct hashtags were found in the CompSci network and the Random network, and how many times were they used on average?",
+      "gold": "In the CompSci network, there are 1,081,403 distinct hashtags, each used approximately 9 times on average, while in the Random network, there are 1,507,773 distinct hashtags, each used approximately 9 times on average.",
+      "prediction": "The CompSci network had 1,000 distinct hashtags, and the Random network had 1,000 distinct hashtags. The average usage of hashtags was 1,000 times per network, which is 100 times more than the CompSci network.",
+      "em": 0,
+      "f1": 0.3607
+    },
+    {
+      "question": "What is the innovative content generation method that represents a paradigm shift from User-Generated Content (UGC) and Professionally Generated Content (PGC)?",
+      "gold": "AIGC (Artificially Intelligent Generated Content)",
+      "prediction": "The innovative content generation method that represents a paradigm shift from User-Generated Content (UGC) and Professionally Generated Content (PGC) is Content-Generated Content (CGC). CGC is a method of generating content that is created by the user, rather than by a third party. CGC is a process of creating content that is generated by the user, rather than by a third party. CGC is a process of creating content that is generated by the user, rather than by a third party. CGC is a process of creating content that is generated by the user, rather than by a third party. CGC is a process of creating content that is generated by the user, rather than by a third party.",
+      "em": 0,
+      "f1": 0.0377
+    },
+    {
+      "question": "What are the primary types of tasks GNNs can perform on graph data?",
+      "gold": "GNNs can perform node-level tasks, graph-level tasks, and edge-level tasks.",
+      "prediction": "GNNs can perform a variety of tasks on graph data, including:",
+      "em": 0,
+      "f1": 0.4
+    }
+  ]
+}
