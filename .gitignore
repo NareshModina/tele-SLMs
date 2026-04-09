@@ -1,38 +1,48 @@
-# =============================================================
-# tele-llm-finetune .gitignore
-# =============================================================
+# Ignore everything by default
+*
 
-# --- datasets ----
-full_finetune_03_2026/tele-tokenized/
-# ── Checkpoints & Model Weights ───────────────────────────────
-checkpoints/
-*.safetensors
-*.bin
-*.pt
-*.pth
-*.ckpt
-*.gguf
+# ── Allow Python source files ─────────────────────────────────────────────
+!*.py
+!*.md
+!*.txt
+!*.yaml
+!*.yml
 
-# ── HuggingFace Cache ─────────────────────────────────────────
-.cache/
-~/.cache/huggingface/
+# ── Allow results directory ───────────────────────────────────────────────
+!results/
+!results/**
 
-# ── Python ────────────────────────────────────────────────────
+# ── Always block large/generated dirs ────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-.Python
 *.egg-info/
 dist/
 build/
-.eggs/
-*.egg
 
-# ── OS ────────────────────────────────────────────────────────
+# ── macOS ─────────────────────────────────────────────────────────────────
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Thumbs.db
+.AppleDouble
+.LSOverride
+
+# ── Environments ──────────────────────────────────────────────────────────
+.env
+.venv/
+venv/
+*.env
+
+# ── Jupyter ───────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Editors ───────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Large training artifacts ──────────────────────────────────────────────
+checkpoints/
+logs/
+tele-tokenized*/
