@@ -7,7 +7,9 @@
 !*.txt
 !*.yaml
 !*.yml
-
+!SmolLM-TS-135M
+SmolLM-TS-135M-it-modelcard.md
+SmolLM-TS-135M-modelcard.md
 # ── Allow results directory ───────────────────────────────────────────────
 !results/
 !results/**
