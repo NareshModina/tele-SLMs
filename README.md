@@ -14,41 +14,9 @@ full fine-tuning on a curated corpus of standards documents.
 The pipeline covers:
 
 1. **Domain-adaptive pretraining** — full fine-tuning on raw standards text
-2. **Instruction fine-tuning** — LoRA SFT on Alpaca (for benchmarking) and smol-smoltalk (for release)
+2. **Instruction fine-tuning** — LoRA SFT on Alpaca (for benchmarking and release)
 3. **Benchmark evaluation** — Ans-PPL and SemScore on Tele-Eval standards-only subset
 4. **Model size ladder** — SmolLM2-135M → 360M → Qwen2.5-0.5B → 1.5B
-
----
-
-## Background — LoRA Pilot
-
-Before committing to the full pipeline, we ran a pilot study using
-**Qwen2.5-1.5B** with LoRA (r=64) to test the overall approach and validate
-the data pipeline. The pilot consisted of two phases:
-
-- **Phase 1 — Continual pretraining** on TeleSpec-Data (~1.26B tokens,
-  3× L40S, 2 epochs). Loss dropped from 1.76 → 1.48, token accuracy
-  improved from 62% → 66.5%.
-
-- **Phase 2 — Instruction fine-tuning (SFT)** on Stanford Alpaca (52k
-  examples). Loss dropped from 1.59 → 1.33.
-
-Tele-Eval benchmark results from the pilot (2,000 examples, seed 42):
-
-| Model | Token F1 | Perplexity |
-|---|---|---|
-| Qwen2.5-1.5B base | 31.20% | 8.90 |
-| Qwen2.5-1.5B LoRA (pretrain + SFT) | 30.08% | 8.35 |
-
-The perplexity improvement (+6%) confirmed domain adaptation. The F1 regression
-was traced to Alpaca-style SFT producing verbose responses that overlap poorly
-with terse gold answers — not a loss of domain knowledge.
-
-**What the pilot told us:** LoRA is sufficient for proof of concept but full
-fine-tuning is needed to update all weights with the domain signal across the
-full corpus. The current pipeline addresses this with full fine-tuning across
-a model size ladder, with separate Alpaca SFT for benchmarking and
-smol-smoltalk SFT for the HuggingFace release.
 
 ---
 
@@ -113,7 +81,7 @@ tele-SLMs/
 ├── sft.py                 # Stage 2 — LoRA instruction fine-tuning
 ├── benchmark.py           # Stage 3 — Ans-PPL + SemScore evaluation
 ├── plot_training.py       # Plot loss / LR curves from trainer_state.json
-├── upload_to_hf.py        # Upload models to HuggingFace Hub
+├── upload_to_hf.py        # Upload models and model cards to HuggingFace Hub
 ├── results/               # Benchmark results and training plots
 │   ├── benchmark_*.json
 │   ├── benchmark_summary.json
@@ -179,8 +147,8 @@ MODEL_NAMES = {
 TRAIN = {"epochs": 2, "max_length": 4096, ...}
 
 SFT = {
-    "dataset":      "HuggingFaceTB/smol-smoltalk",
-    "subset_ratio": 0.05,
+    "dataset":      "tatsu-lab/alpaca",  # V1 — Alpaca for benchmark + release
+    "subset_ratio": 1.0,                 # full dataset
     "epochs":       1,
     "lr":           1e-5,
 }
@@ -195,19 +163,8 @@ BENCHMARK = {"n_examples": 10000, "source_filter": "standard"}
 | Checkpoint | Description |
 |---|---|
 | `checkpoints/SmolLM-TS-135M/` | Pretrained base weights |
-| `checkpoints/SmolLM-TS-135M-alpaca/` | Pretrain + Alpaca SFT — benchmark |
+| `checkpoints/SmolLM-TS-135M-alpaca/` | Pretrain + Alpaca SFT — benchmark + HF release |
 | `checkpoints/SmolLM2-135M-alpaca/` | Base + Alpaca SFT — baseline |
-| `checkpoints/SmolLM-TS-135M-it/` | Pretrain + Alpaca SFT — HF release (V1) |
-
----
-
-## Upload to HuggingFace
-
-```bash
-python upload_to_hf.py           # upload all available models
-python upload_to_hf.py --dry-run # preview without uploading
-python upload_to_hf.py --model SmolLM-TS-135M-alpaca
-```
 
 ---
 
