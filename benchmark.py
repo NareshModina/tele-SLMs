@@ -291,8 +291,7 @@ def benchmark(model_name: str, load_path: str, label: str,
             "generated":  g,
             "semscore":   s,
         }
-        for q, r, g, s in zip(questions[:20], references[:20],
-                               generated[:20], semscore_list[:20])
+        for q, r, g, s in zip(questions, references, generated, semscore_list)
     ]
 
     result = {
