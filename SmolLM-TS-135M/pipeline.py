@@ -395,44 +395,6 @@ def run_pipeline(model_name: str, args: argparse.Namespace,
             elapsed = time.time() - t
             log_stage(stage_key, "done" if ok else "FAILED", elapsed, note=bench_label)
 
-    # ── Stage 4: SFT-smoltalk — HuggingFace release model ────────────────
-    # smol-smoltalk SFT on pretrained checkpoint — better chat capabilities
-    # Not benchmarked — uploaded to HuggingFace as the final model
-
-    smoltalk_merged  = sft_smoltalk_merged_dir(pt_dir)
-    smoltalk_adapter = sft_smoltalk_adapter_dir(pt_dir)
-
-    if args.skip_sft:
-        print(f"\n  [SKIP] SFT-smoltalk — --skip-sft set")
-        log_stage("sft-smoltalk", "skipped")
-
-    elif checkpoint_exists(smoltalk_merged) and not args.force:
-        print(f"\n  [SKIP] SFT-smoltalk — exists at {smoltalk_merged}")
-        log_stage("sft-smoltalk", "skipped (exists)", note=smoltalk_merged)
-
-    else:
-        cmd = ["sft.py", "--input", pt_dir, "--model", model_name,
-               "--dataset", "HuggingFaceTB/smol-smoltalk"]
-        if args.max_steps > 0:
-            cmd += ["--max-steps", str(args.max_steps)]
-        t = time.time()
-        ok = run_stage(
-            label        = f"SFT-smoltalk (pretrain→smoltalk) — {slug}",
-            cmd          = cmd,
-            log_path     = os.path.join(C.LOGS_DIR, slug, f"{slug}-sft-smoltalk.log"),
-            use_torchrun = True,
-            nproc        = nproc,
-            port         = port_sft + 2,
-        )
-        elapsed = time.time() - t
-        if not ok:
-            log_stage("sft-smoltalk", "FAILED", elapsed)
-            print(f"\n  Pipeline stopped. Check logs/{slug}/{slug}-sft-smoltalk.log")
-            return False
-        log_stage("sft-smoltalk", "done", elapsed, note=smoltalk_merged)
-        print(f"\n  HF release model ready → {smoltalk_merged}")
-        print(f"  Upload with: huggingface-cli upload nareshmodina/{slug}-it {smoltalk_merged} .")
-
     return True
 
 

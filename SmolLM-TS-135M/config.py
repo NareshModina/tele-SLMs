@@ -195,13 +195,13 @@ WANDB_PROJECT = "tele-slms"
 
 SFT = {
     # Instruction dataset — HuggingFace dataset ID
-    # SmolLM2 models (135M, 360M): use smol-smoltalk — purpose-built for sub-1B SmolLM2
-    # Qwen2.5 models (0.5B, 1.5B): use smoltalk — full version for larger capacity
+    # Current: Alpaca for all models (V1 release)
+    # V2 will use smol-smoltalk for better chat capabilities
     # Options:
+    #   "tatsu-lab/alpaca"               — 52k single-turn (current, comparable to Tele-LLMs paper)
     #   "HuggingFaceTB/smol-smoltalk"    — 460k multi-turn, sub-1B SmolLM2 models
     #   "HuggingFaceTB/smoltalk"         — 1M multi-turn, Qwen2.5-0.5B and 1.5B
-    #   "tatsu-lab/alpaca"               — 52k single-turn (baseline, Tele-LLMs paper used this)
-    "dataset":          "HuggingFaceTB/smol-smoltalk",
+    "dataset":          "tatsu-lab/alpaca",
 
     # Fraction of dataset to use (1.0 = full, 0.05 = 5%)
     # Goal: teach ChatML format only — LoRA protects domain weights from being overwritten
