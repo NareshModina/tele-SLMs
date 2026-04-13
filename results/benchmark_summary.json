@@ -1,0 +1,20 @@
+[
+  {
+    "label": "SmolLM-TS-135M-alpaca",
+    "model_name": "HuggingFaceTB/SmolLM2-135M",
+    "source_filter": "standard",
+    "n_examples": 50,
+    "ans_ppl": 11.774581687249501,
+    "semscore": 0.6349237724766135,
+    "timestamp": "20260413_150921"
+  },
+  {
+    "label": "SmolLM2-135M-alpaca",
+    "model_name": "HuggingFaceTB/SmolLM2-135M",
+    "source_filter": "standard",
+    "n_examples": 50,
+    "ans_ppl": 12.963344857786481,
+    "semscore": 0.6283787074685097,
+    "timestamp": "20260413_151041"
+  }
+]

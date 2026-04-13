@@ -1,180 +1,250 @@
 # tele-SLMs
 
-A research project investigating whether sub-2B parameter language models can acquire accurate knowledge of 3GPP and ETSI telecommunications standards through domain-adaptive pretraining and instruction fine-tuning.
-
-The repository is organised in two phases, each in its own sub-directory:
-
-```
-tele-SLMs/
-├── teleSLM_peft_pilot/    LoRA proof-of-concept on Qwen2.5-1.5B
-└── teleSLMs-fft/      Full fine-tuning benchmark across a model size ladder
-```
-
----
-
-## Research Question
-
-Can a small language model (sub-2B parameters) trained exclusively on telecommunications standards documents produce accurate, standards-grounded answers to technical questions — and how does performance scale with model size?
+Fine-tuning small language models (SLMs) on telecommunications standards
+for domain-specific knowledge acquisition and benchmarking.
 
 ---
 
 ## Overview
 
-### Phase 1 — LoRA Pilot (`teleSLM_peft_pilot/`)
+This project investigates whether sub-2B parameter language models can acquire
+accurate knowledge of 3GPP and ETSI telecommunications standards through
+full fine-tuning on a curated corpus of standards documents.
 
-Before committing to full fine-tuning, we ran a two-stage LoRA proof-of-concept on `Qwen2.5-1.5B` to validate the data pipeline and confirm that continual pretraining on telecom standards meaningfully shifts the model distribution.
+The pipeline covers:
 
-**Stage 1 — Continual pretraining** on Tele-Data (Maatouk et al., 2024): 3GPP standards (upsampled 8×) and arXiv telecom papers, ~1.26B tokens/epoch, 2 epochs, 33,442 steps.
+1. **Domain-adaptive pretraining** — full fine-tuning on raw standards text
+2. **Instruction fine-tuning** — LoRA SFT on Alpaca (for benchmarking) and smol-smoltalk (for release)
+3. **Benchmark evaluation** — Ans-PPL and SemScore on Tele-Eval standards-only subset
+4. **Model size ladder** — SmolLM2-135M → 360M → Qwen2.5-0.5B → 1.5B
 
-**Stage 2 — Instruction fine-tuning** on Alpaca (52k examples), LoRA SFT, ~34 minutes.
+---
 
-**Tele-Eval results** (2,000 examples, seed 42):
+## Background — LoRA Pilot
+
+Before committing to the full pipeline, we ran a pilot study using
+**Qwen2.5-1.5B** with LoRA (r=64) to test the overall approach and validate
+the data pipeline. The pilot consisted of two phases:
+
+- **Phase 1 — Continual pretraining** on TeleSpec-Data (~1.26B tokens,
+  3× L40S, 2 epochs). Loss dropped from 1.76 → 1.48, token accuracy
+  improved from 62% → 66.5%.
+
+- **Phase 2 — Instruction fine-tuning (SFT)** on Stanford Alpaca (52k
+  examples). Loss dropped from 1.59 → 1.33.
+
+Tele-Eval benchmark results from the pilot (2,000 examples, seed 42):
 
 | Model | Token F1 | Perplexity |
 |---|---|---|
 | Qwen2.5-1.5B base | 31.20% | 8.90 |
-| Qwen2.5-1.5B LoRA pretrain + SFT | 30.08% | 8.35 |
+| Qwen2.5-1.5B LoRA (pretrain + SFT) | 30.08% | 8.35 |
 
-The 6% perplexity improvement confirmed that pretraining shifted the model toward the telecom distribution. The slight F1 regression was traced to a format mismatch between verbose Alpaca-style responses and the terse gold answers in Tele-Eval — not a loss of domain knowledge.
+The perplexity improvement (+6%) confirmed domain adaptation. The F1 regression
+was traced to Alpaca-style SFT producing verbose responses that overlap poorly
+with terse gold answers — not a loss of domain knowledge.
 
-**What the pilot revealed:**
-
-- LoRA is insufficient for fully absorbing a large standards corpus — the low-rank adapter lacks the capacity to update all weights with the domain signal
-- The training data (mostly arXiv, only 2,801 standards documents) was dominated by general telecom research rather than actual standards text
-- Tele-Eval scores are heavily influenced by source type — ~79% of questions come from arXiv, not standards alone.
-
-See [`teleSLMs_peft_pilot/README.md`](teleSLM_peft_pilot/README.md) for full details.
+**What the pilot told us:** LoRA is sufficient for proof of concept but full
+fine-tuning is needed to update all weights with the domain signal across the
+full corpus. The current pipeline addresses this with full fine-tuning across
+a model size ladder, with separate Alpaca SFT for benchmarking and
+smol-smoltalk SFT for the HuggingFace release.
 
 ---
 
-### Phase 2 — Full Fine-Tuning (`teleSLMs-fft/`)
+## Results
 
-The full pipeline addresses every limitation identified in the pilot:
+### SmolLM-TS-135M (4096 context, 10,000 standards examples)
 
-**Dataset — [TeleSpec-Data](https://huggingface.co/datasets/nareshmodina/TeleSpec-Data)**
-
-A new standards-only corpus built specifically for this project:
-
-| Subset | Source | Documents | Notes |
+| Model | Ans-PPL ↓ | SemScore ↑ | Notes |
 |---|---|---|---|
-| `3gpp-standard` | TSpec-LLM (Rel-8 → Rel-19) | 15,054 | No arXiv |
-| `etsi-standard` | NetSpec-LLM (15 working groups, 2000–2024) | 23,248 | No arXiv |
-| **Total** | | **38,302** | **1.87B packed tokens** |
+| SmolLM2-135M-alpaca (base + Alpaca) | 13.42 | 0.6183 | Baseline |
+| **SmolLM-TS-135M-alpaca (pretrain + Alpaca)** | **9.19** | **0.6504** | Ours |
+| Improvement | **31.5%** ↓ | **+0.0321** ↑ | |
 
-Unlike Tele-Data, TeleSpec-Data contains zero arXiv content — every token is from actual 3GPP or ETSI standards documents. This is a fundamental improvement: the pilot trained on ~13% standards, ~83% arXiv; the full pipeline trains on 100% standards.
+**Pretraining:** 2 epochs, 7,054 steps, eval loss 1.326 → 0.980
 
-**Training — Full fine-tuning (no LoRA)**
+**HuggingFace releases:**
+- 🤗 [nareshmodina/SmolLM-TS-135M](https://huggingface.co/nareshmodina/SmolLM-TS-135M) — pretrained base
+- 🤗 [nareshmodina/SmolLM-TS-135M-it](https://huggingface.co/nareshmodina/SmolLM-TS-135M-it) — Alpaca instruction tuned
 
-All model weights are updated during pretraining. LoRA is used only for the subsequent instruction fine-tuning step, preserving domain knowledge while adding chatbot-style behaviour.
+### Remaining models (in progress)
 
-**Model size ladder**
-
-| Model | Parameters |
-|---|---|
-| `HuggingFaceTB/SmolLM2-135M` | 135M |
-| `HuggingFaceTB/SmolLM2-360M` | 360M |
-| `Qwen/Qwen2.5-1.5B` | 0.5B |
-| `Qwen/Qwen2.5-1.5B` | 1.5B |
-
-**Evaluation — standards-specific**
-
-Tele-Eval results are reported separately for standards-derived questions (`standard_*` IDs) and the full benchmark. The standards-only F1 is the primary metric — it measures what the model actually learned from the training corpus.
-
----
-
-## Key Design Decisions
-
-| Decision | Pilot | Full pipeline | Rationale |
+| Model | Ans-PPL ↓ | SemScore ↑ | Status |
 |---|---|---|---|
-| Fine-tuning method | LoRA (pretrain + SFT) | Full FT (pretrain) + LoRA (SFT) | Full FT needed to absorb large corpus; LoRA preserves domain knowledge during SFT |
-| Training data | Tele-Data (arXiv + standards) | TeleSpec-Data (standards only) | Eliminate arXiv contamination |
-| Dataset size | ~1.26B tokens | 1.87B packed tokens | more tokens, most importantly all are from telecom standars |
-| SFT dataset | Alpaca 52k | Alpaca 52k (→ UltraChat 200k) | Alpaca as baseline; UltraChat for ablation |
-| Evaluation | Full Tele-Eval F1 | Standards-only + full F1 | Isolate standards comprehension from general telecom knowledge |
-| Models | Qwen2.5-1.5B only | SmolLM2-135M → 360M → Qwen2.5-1.5B | Size ladder to study scaling behaviour |
+| SmolLM2-360M-alpaca (baseline) | — | — | 🔄 training |
+| SmolLM-TS-360M-alpaca (ours) | — | — | 🔄 training |
+| SmolLM-TS-500M-alpaca (ours) | — | — | ⏳ pending |
+| SmolLM-TS-1.5B-alpaca (ours) | — | — | ⏳ pending |
 
 ---
 
-## Progress
+## Pipeline
 
-### ✅ Completed
+```
+Stage 0 — Tokenize    tokenize_dataset.py   pack TeleSpec-Data into 4096-token blocks (once per model family)
+Stage 1 — Pretrain    train.py              full fine-tuning on packed dataset (+ plot curves)
+Stage 2 — SFT-Alpaca  sft.py ×2             Alpaca SFT on pretrained + base model (for benchmark)
+Stage 3 — Benchmark   benchmark.py ×2       Ans-PPL + SemScore on standards subset
+```
 
-**LoRA Pilot (`teleSLMs-pilot/`)**
-- [x] Qwen2.5-1.5B — continual pretraining on Tele-Data (LoRA r=64, 33,442 steps, 1.26B tokens/epoch)
-- [x] Qwen2.5-1.5B — instruction fine-tuning on Alpaca (LoRA SFT, 52k examples)
-- [x] Qwen2.5-1.5B — Tele-Eval evaluation (Token F1: 30.08%, Perplexity: 8.35)
-- [x] Pilot analysis — identified LoRA capacity limits and arXiv data contamination
+> **V2 (planned):** smol-smoltalk SFT for better chat capabilities — pending evaluation of V1 results across all model sizes.
 
-**Full Fine-Tuning Pipeline (`teleSLMs-fft/`)**
-- [x] TeleSpec-Data — 38,302 standards documents (3GPP + ETSI), published on HuggingFace
-- [x] Token packing pipeline — `tokenize_dataset.py`, 914k packed blocks, 1.87B tokens
-- [x] Full fine-tuning pipeline — `train.py`, `sft.py`, `eval.py`, `pipeline.py`, `config.py`
-- [x] SmolLM2-135M tokenization — packed dataset ready at `./tele-tokenized`
+Run end-to-end:
+```bash
+python pipeline.py --model HuggingFaceTB/SmolLM2-135M
+```
 
----
-
-### 🔄 In Progress
-
-- **SmolLM2-135M — pretraining** (full fine-tuning on TeleSpec-Data, currently running)
-- **SmolLM2-135M — SFT** (LoRA on Alpaca, pending pretrain completion)
-- **SmolLM2-135M — evaluation** (Tele-Eval standards-only + full, pending SFT)
-- **SmolLM2-135M — UltraChat ablation** (100k subset SFT, compare vs Alpaca)
+Smoke test (50 steps):
+```bash
+python pipeline.py --model HuggingFaceTB/SmolLM2-135M --max-steps 50
+```
 
 ---
 
-### 📋 Pending
+## Repository Structure
 
-**SmolLM2-360M**
-- [ ] Tokenize dataset (shared SmolLM2 tokenizer — no re-tokenization needed)
-- [ ] Pretrain — full fine-tuning on TeleSpec-Data
-- [ ] SFT — LoRA on Alpaca
-- [ ] Evaluate — Tele-Eval standards-only + full
-
-**Qwen/Qwen2.5-0.5B**
-- [ ] Tokenize dataset (Qwen tokenizer — separate tokenization run required)
-- [ ] Pretrain — full fine-tuning on TeleSpec-Data
-- [ ] SFT — LoRA on Alpaca
-- [ ] Evaluate — Tele-Eval standards-only + full
-
-**Qwen/Qwen2.5-1.5B**
-- [ ] Tokenize dataset (shared with Qwen2.5-0.5B tokenizer)
-- [ ] Pretrain — full fine-tuning on TeleSpec-Data
-- [ ] SFT — LoRA on Alpaca
-- [ ] Evaluate — Tele-Eval standards-only + full
-
-**Results & write-up**
-- [ ] Populate benchmark results table across all models
-- [ ] UltraChat 200k SFT ablation — compare standards F1 vs Alpaca across models
-- [ ] Scaling analysis — standards F1 vs model size plot
-- [ ] GitHub release with model checkpoints
+```
+tele-SLMs/
+├── config.py              # Central config — edit before running anything
+├── pipeline.py            # End-to-end runner
+├── tokenize_dataset.py    # Stage 0 — pre-tokenize and pack TeleSpec-Data
+├── train.py               # Stage 1 — full fine-tuning
+├── sft.py                 # Stage 2 — LoRA instruction fine-tuning
+├── benchmark.py           # Stage 3 — Ans-PPL + SemScore evaluation
+├── plot_training.py       # Plot loss / LR curves from trainer_state.json
+├── upload_to_hf.py        # Upload models to HuggingFace Hub
+├── results/               # Benchmark results and training plots
+│   ├── benchmark_*.json
+│   ├── benchmark_summary.json
+│   └── plots/
+│       ├── SmolLM-TS-135M-pretrain_curves.png
+│       └── ...
+├── checkpoints/           # Model weights (gitignored)
+└── logs/                  # Training logs (gitignored)
+```
 
 ---
 
 ## Dataset
 
-**Pretraining:** [nareshmodina/TeleSpec-Data](https://huggingface.co/datasets/nareshmodina/TeleSpec-Data) — standards only, CC BY-NC 4.0
+**Training — [nareshmodina/TeleSpec-Data](https://huggingface.co/datasets/nareshmodina/TeleSpec-Data)**
 
-**Evaluation:** [AliMaatouk/Tele-Eval](https://huggingface.co/datasets/AliMaatouk/Tele-Eval) — 750k telecom Q&A pairs, held out entirely from training
+| Subset | Source | Documents |
+|---|---|---|
+| `3gpp-standard` | TSpec-LLM (Rel-8 → Rel-19) | 15,054 |
+| `etsi-standard` | NetSpec-LLM (15 working groups, 2000–2024) | 23,248 |
+| **Total** | | **38,302** |
+
+Packed at 4096 tokens → 457,160 blocks → 1.87B tokens
+
+**Evaluation — [AliMaatouk/Tele-Eval](https://huggingface.co/datasets/AliMaatouk/Tele-Eval)**
+
+750,000 open-ended telecom Q&A pairs. Primary evaluation uses the
+`standard_*` subset (83,056 examples, 10,000 sampled per run).
+
+**SFT dataset (V1):** `tatsu-lab/alpaca` (52k examples, 1 epoch) — consistent with Tele-LLMs paper for fair comparison
+
+---
+
+## Installation
+
+```bash
+pip install torch transformers datasets trl peft accelerate sentence-transformers tqdm
+```
+
+Requires Python 3.10+ and CUDA-capable GPUs.
+
+---
+
+## Configuration
+
+All settings in `config.py`. Key sections:
+
+```python
+MODELS = [
+    "HuggingFaceTB/SmolLM2-135M",
+    "HuggingFaceTB/SmolLM2-360M",
+    "Qwen/Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-1.5B",
+]
+
+MODEL_NAMES = {
+    "HuggingFaceTB/SmolLM2-135M": "SmolLM-TS-135M",
+    "HuggingFaceTB/SmolLM2-360M": "SmolLM-TS-360M",
+    "Qwen/Qwen2.5-0.5B":          "SmolLM-TS-500M",
+    "Qwen/Qwen2.5-1.5B":          "SmolLM-TS-1.5B",
+}
+
+TRAIN = {"epochs": 2, "max_length": 4096, ...}
+
+SFT = {
+    "dataset":      "HuggingFaceTB/smol-smoltalk",
+    "subset_ratio": 0.05,
+    "epochs":       1,
+    "lr":           1e-5,
+}
+
+BENCHMARK = {"n_examples": 10000, "source_filter": "standard"}
+```
+
+---
+
+## Checkpoint Naming
+
+| Checkpoint | Description |
+|---|---|
+| `checkpoints/SmolLM-TS-135M/` | Pretrained base weights |
+| `checkpoints/SmolLM-TS-135M-alpaca/` | Pretrain + Alpaca SFT — benchmark |
+| `checkpoints/SmolLM2-135M-alpaca/` | Base + Alpaca SFT — baseline |
+| `checkpoints/SmolLM-TS-135M-it/` | Pretrain + Alpaca SFT — HF release (V1) |
+
+---
+
+## Upload to HuggingFace
+
+```bash
+python upload_to_hf.py           # upload all available models
+python upload_to_hf.py --dry-run # preview without uploading
+python upload_to_hf.py --model SmolLM-TS-135M-alpaca
+```
+
+---
+
+## Metrics
+
+| Metric | Description |
+|---|---|
+| **Ans-PPL** | Answer perplexity conditioned on question (eq. 5, Maatouk et al. 2024) |
+| **SemScore** | Cosine similarity via `all-mpnet-base-v2` (eq. 6, Maatouk et al. 2024) |
+
+---
+
+## HuggingFace Collection
+
+🗂️ [nareshmodina/SmolLM-TS](https://huggingface.co/collections/nareshmodina/smollm-ts)
 
 ---
 
 ## Citation
 
-If you use TeleSpec-Data, please cite:
-
 ```bibtex
+@misc{modina2025smollmts,
+  author    = {Naresh Modina},
+  title     = {SmolLM-TS: Small Language Models for Telecommunications Standards},
+  year      = {2025},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/collections/nareshmodina/smollm-ts}
+}
+
 @dataset{modina2025telespecdata,
   author    = {Naresh Modina},
   title     = {TeleSpec-Data: A Telecommunications Standards Dataset for Language Model Pretraining},
   year      = {2025},
   publisher = {Hugging Face},
-  url       = {https://huggingface.co/datasets/NareshModina/TeleSpec-Data}
+  url       = {https://huggingface.co/datasets/nareshmodina/TeleSpec-Data}
 }
-```
 
-Please also cite the upstream sources used for evaluation and comparison:
-
-```bibtex
 @misc{maatouk2024telellms,
   title         = {Tele-LLMs: A Series of Specialized Large Language Models for Telecommunications},
   author        = {Ali Maatouk and Kenny Chirino Ampudia and Rex Ying and Leandros Tassiulas},
@@ -182,15 +252,6 @@ Please also cite the upstream sources used for evaluation and comparison:
   eprint        = {2409.05314},
   archivePrefix = {arXiv},
   primaryClass  = {cs.IT}
-}
-
-@misc{nikbakht2024tspecllm,
-  title         = {TSpec-LLM: An Open-source Dataset for LLM Understanding of 3GPP Specifications},
-  author        = {Rasoul Nikbakht and Mohamed Benzaghta and Giovanni Geraci},
-  year          = {2024},
-  eprint        = {2406.01768},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.NI}
 }
 ```
 
