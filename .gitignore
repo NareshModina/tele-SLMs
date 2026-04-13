@@ -13,7 +13,6 @@ SmolLM-TS-135M-modelcard.md
 # ── Allow results directory ───────────────────────────────────────────────
 !results/
 !results/**
-upload_to_hf.py
 # ── Always block large/generated dirs ────────────────────────────────────
 __pycache__/
 *.py[cod]
