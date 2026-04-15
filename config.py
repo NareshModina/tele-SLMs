@@ -217,7 +217,7 @@ SFT = {
     # Goal: teach ChatML format only — LoRA protects domain weights from being overwritten
     # smol-smoltalk: 5% = ~23k examples (sufficient for format acquisition)
     # smoltalk:      5% = ~50k examples
-    "subset_ratio":     0.05,
+    "subset_ratio":     1.0,
 
     # LoRA config — conservative rank to minimise drift from domain-adapted weights
     "lora_r":           16,

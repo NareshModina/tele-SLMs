@@ -50,13 +50,13 @@ UPLOAD_CONFIG = {
         "SmolLM-TS-360M-it",
         "SmolLM-TS-360M-it-modelcard.md",
     ),
-    "SmolLM-TS-500M": (
-        "SmolLM-TS-500M",
-        "SmolLM-TS-500M-modelcard.md",
+    "Qwen-TS-500M": (
+        "Qwen-TS-500M",
+        "Qwen-TS-500M-modelcard.md",
     ),
-    "SmolLM-TS-500M-alpaca": (
-        "SmolLM-TS-500M-it",
-        "SmolLM-TS-500M-it-modelcard.md",
+    "Qwen-TS-500M-alpaca": (
+        "Qwen-TS-500M-it",
+        "Qwen-TS-500M-it-modelcard.md",
     ),
     "SmolLM-TS-1.5B": (
         "SmolLM-TS-1.5B",
