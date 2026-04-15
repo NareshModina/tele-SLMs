@@ -34,8 +34,8 @@ ACTIVE_MODEL = MODELS[0]
 MODEL_NAMES = {
     "HuggingFaceTB/SmolLM2-135M": "SmolLM-TS-135M",
     "HuggingFaceTB/SmolLM2-360M": "SmolLM-TS-360M",
-    "Qwen/Qwen2.5-0.5B":          "SmolLM-TS-500M",
-    "Qwen/Qwen2.5-1.5B":          "SmolLM-TS-1.5B",
+    "Qwen/Qwen2.5-0.5B":          "Qwen-TS-500M",
+    "Qwen/Qwen2.5-1.5B":          "Qwen-TS-1.5B",
 }
 
 def get_model_name(model_id: str) -> str:
@@ -120,16 +120,21 @@ def get_lr(model_name: str) -> float:
     return LR_OVERRIDES.get(slug, LR_DEFAULT)
 
 # Per-model batch size overrides at 4096 context length
-# Qwen2.5-1.5B needs smaller batch + gradient checkpointing to fit on 3×L40S
 PER_DEVICE_BS_OVERRIDES = {
     "SmolLM2-135M":  4,
     "SmolLM2-360M":  4,
-    "Qwen2.5-0.5B":  4,
-    "Qwen2.5-1.5B":  2,   # tight at ~44GB — grad checkpointing required
+    "Qwen2.5-0.5B":  2,
+    "Qwen2.5-1.5B":  2,
 }
 
 GRAD_CKPT_OVERRIDES = {
     "Qwen2.5-1.5B":  True,
+}
+
+# DeepSpeed config path per model slug — None means no DeepSpeed
+DEEPSPEED_OVERRIDES = {
+    "Qwen2.5-0.5B":  "./ds_zero2.json",
+    "Qwen2.5-1.5B":  "./ds_zero2.json",
 }
 
 def get_per_device_bs(model_name: str) -> int:
@@ -141,6 +146,11 @@ def get_grad_ckpt(model_name: str) -> bool:
     """Return whether gradient checkpointing should be enabled."""
     slug = model_name.split("/")[-1]
     return GRAD_CKPT_OVERRIDES.get(slug, TRAIN["gradient_checkpointing"])
+
+def get_deepspeed(model_name: str):
+    """Return DeepSpeed config path for a given model, or None."""
+    slug = model_name.split("/")[-1]
+    return DEEPSPEED_OVERRIDES.get(slug, None)
 
 def get_tokenized_dir(model_name: str) -> str:
     """Return the correct tokenized dataset dir for a given model family."""

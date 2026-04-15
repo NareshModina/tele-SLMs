@@ -166,6 +166,7 @@ def train(args):
         remove_unused_columns       = False,
         ddp_find_unused_parameters  = False,
         gradient_checkpointing      = args.gradient_checkpointing,
+        deepspeed                   = args.deepspeed,
     )
 
     collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
@@ -224,6 +225,10 @@ def main():
                         action="store_true",
                         default=None,
                         dest="gradient_checkpointing")
+    parser.add_argument("--deepspeed",
+                        default=None,
+                        dest="deepspeed",
+                        help="Path to DeepSpeed config JSON (default: auto from config per model)")
 
     args = parser.parse_args()
 
@@ -236,6 +241,8 @@ def main():
         args.per_device_bs = C.get_per_device_bs(args.model)
     if args.gradient_checkpointing is None:
         args.gradient_checkpointing = C.get_grad_ckpt(args.model)
+    if args.deepspeed is None:
+        args.deepspeed = C.get_deepspeed(args.model)
 
     train(args)
 

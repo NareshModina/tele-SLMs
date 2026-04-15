@@ -126,9 +126,10 @@ def upload_model(api: HfApi, ckpt_name: str, repo_name: str,
     print(f"  Uploading...")
     try:
         api.upload_folder(
-            folder_path = str(ckpt_path),
-            repo_id     = repo_id,
-            repo_type   = "model",
+            folder_path     = str(ckpt_path),
+            repo_id         = repo_id,
+            repo_type       = "model",
+            ignore_patterns = ["checkpoint-*/", "*.pt", "rng_state_*.pth"],
         )
         print(f"  ✓ Uploaded → https://huggingface.co/{repo_id}")
         return True

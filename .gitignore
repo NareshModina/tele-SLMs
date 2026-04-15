@@ -10,9 +10,7 @@
 !SmolLM-TS-135M
 SmolLM-TS-135M-it-modelcard.md
 SmolLM-TS-135M-modelcard.md
-# ── Allow results directory ───────────────────────────────────────────────
-!results/
-!results/**
+results/
 # ── Always block large/generated dirs ────────────────────────────────────
 __pycache__/
 *.py[cod]
